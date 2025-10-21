@@ -1,36 +1,63 @@
-(function() {
-  // Function to calculate DOM level
-  function getDOMLevel(id) {
-    const element = document.getElementById(id);
-    if (!element) return null;
+document.addEventListener("DOMContentLoaded", function() {
+    const usernameInput = document.getElementById("username");
+    const passwordInput = document.getElementById("password");
+    const rememberCheckbox = document.getElementById("checkbox");
+    const submitBtn = document.getElementById("submit");
+    const existingBtn = document.getElementById("existing");
 
-    let level = 0;
-    let current = element;
+    // Function to check if credentials exist in localStorage
+    function checkExistingCredentials() {
+        const savedUsername = localStorage.getItem("username");
+        const savedPassword = localStorage.getItem("password");
 
-    while (current) {
-      level++;
-      current = current.parentElement;
+        if (savedUsername && savedPassword) {
+            existingBtn.style.display = "inline-block"; // show button
+        } else {
+            existingBtn.style.display = "none";
+        }
     }
 
-    return level;
-  }
+    // Initial check on page load
+    checkExistingCredentials();
 
-  // Wait until the DOM is ready
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", () => {
-      const level = getDOMLevel("level");
-      if (level === null) {
-        alert("Element with id 'level' not found.");
-      } else {
-        alert(`The level of the element is: ${level}`);
-      }
+    // Submit form
+    document.getElementById("loginForm").addEventListener("submit", function(e) {
+        e.preventDefault(); // prevent page reload
+
+        const username = usernameInput.value.trim();
+        const password = passwordInput.value.trim();
+
+        if (!username || !password) {
+            alert("Please enter username and password");
+            return;
+        }
+
+        alert(`Logged in as ${username}`);
+
+        if (rememberCheckbox.checked) {
+            localStorage.setItem("username", username);
+            localStorage.setItem("password", password);
+        } else {
+            localStorage.removeItem("username");
+            localStorage.removeItem("password");
+        }
+
+        // Update existing user button
+        checkExistingCredentials();
+
+        // Optionally clear inputs if not remembering
+        if (!rememberCheckbox.checked) {
+            usernameInput.value = "";
+            passwordInput.value = "";
+            rememberCheckbox.checked = false;
+        }
     });
-  } else {
-    const level = getDOMLevel("level");
-    if (level === null) {
-      alert("Element with id 'level' not found.");
-    } else {
-      alert(`The level of the element is: ${level}`);
-    }
-  }
-})();
+
+    // Existing user login
+    existingBtn.addEventListener("click", function() {
+        const savedUsername = localStorage.getItem("username");
+        if (savedUsername) {
+            alert(`Logged in as ${savedUsername}`);
+        }
+    });
+});
