@@ -1,21 +1,36 @@
-// Wait for the DOM to be fully loaded
-window.addEventListener("load", () => {
-  // Find the element with id "level"
-  const target = document.getElementById("level");
+(function() {
+  // Function to calculate DOM level
+  function getDOMLevel(id) {
+    const element = document.getElementById(id);
+    if (!element) return null;
 
-  if (!target) {
-    alert("Error: Element with id 'level' not found in the DOM.");
-    return;
+    let level = 0;
+    let current = element;
+
+    while (current) {
+      level++;
+      current = current.parentElement;
+    }
+
+    return level;
   }
 
-  let level = 0;
-  let current = target;
-
-  // Traverse up the DOM tree counting parent elements
-  while (current) {
-    level++;
-    current = current.parentElement; // move up to parent
+  // Wait until the DOM is ready
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", () => {
+      const level = getDOMLevel("level");
+      if (level === null) {
+        alert("Element with id 'level' not found.");
+      } else {
+        alert(`The level of the element is: ${level}`);
+      }
+    });
+  } else {
+    const level = getDOMLevel("level");
+    if (level === null) {
+      alert("Element with id 'level' not found.");
+    } else {
+      alert(`The level of the element is: ${level}`);
+    }
   }
-
-  alert(`The level of the element is: ${level}`);
-});
+})();
