@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const submitBtn = document.getElementById("submit");
     const existingBtn = document.getElementById("existing");
 
-    // Function to check if credentials exist in localStorage
+    // Check if credentials exist in localStorage and show existing user button
     function checkExistingCredentials() {
         const savedUsername = localStorage.getItem("username");
         const savedPassword = localStorage.getItem("password");
@@ -13,14 +13,13 @@ document.addEventListener("DOMContentLoaded", function() {
         if (savedUsername && savedPassword) {
             existingBtn.style.display = "inline-block"; // show button
         } else {
-            existingBtn.style.display = "none";
+            existingBtn.style.display = "none"; // hide button
         }
     }
 
-    // Initial check on page load
-    checkExistingCredentials();
+    checkExistingCredentials(); // run on page load
 
-    // Submit form
+    // Form submission
     document.getElementById("loginForm").addEventListener("submit", function(e) {
         e.preventDefault(); // prevent page reload
 
@@ -42,7 +41,6 @@ document.addEventListener("DOMContentLoaded", function() {
             localStorage.removeItem("password");
         }
 
-        // Update existing user button
         checkExistingCredentials();
 
         // Optionally clear inputs if not remembering
